@@ -159,7 +159,7 @@ class TarotCardPlugin(MaiBotPlugin):
     @Command(
         "tarot_long",
         description="通过特定短语触发塔罗牌抽取",
-        pattern=r"^不属于这个时代的愚者;雾之上的神秘主宰；执掌好运的黄黑之王。请帮我抽一张塔罗牌$",
+        pattern=r"^不属于这个时代的愚者[;；]雾之上的神秘主宰[;；]执掌好运的黄黑之王。请帮我抽一张塔罗牌$",
     )
     async def handle_tarot_long(self, stream_id: str = "", **kwargs) -> tuple:
         return await self._draw_card(stream_id)
