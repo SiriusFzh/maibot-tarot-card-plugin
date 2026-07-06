@@ -154,7 +154,7 @@ class TarotCardPlugin(MaiBotPlugin):
 
         for kw in TRIGGER_KEYWORDS:
             if kw in text:
-                stream_id = str(message.get("stream_id", "") or kwargs.get("stream_id", "") or "")
+                stream_id = str(message.get("session_id", "") or "")
                 if stream_id:
                     await self._draw_card(stream_id)
                 return {"action": "abort"}
