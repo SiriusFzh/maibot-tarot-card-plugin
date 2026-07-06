@@ -135,8 +135,8 @@ class TarotCardPlugin(MaiBotPlugin):
         return await self._draw_card(stream_id)
 
     @EventHandler(
-        "tarot_long_phrase",
-        description="检测长触发短语并抽取塔罗牌",
+        "tarot_natural",
+        description="检测自然语言触发塔罗牌抽取",
         event_type=EventType.ON_MESSAGE,
     )
     async def handle_long_phrase(self, message: Any = None, stream_id: str = "", **kwargs) -> tuple:
