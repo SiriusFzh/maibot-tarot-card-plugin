@@ -5,8 +5,8 @@ import random
 from pathlib import Path
 from typing import Any, ClassVar
 
-from maibot_sdk import Command, EventHandler, Field, MaiBotPlugin, PluginConfigBase
-from maibot_sdk.types import EventType
+from maibot_sdk import Command, Field, HookHandler, MaiBotPlugin, PluginConfigBase
+from maibot_sdk.types import HookMode, HookOrder
 
 
 IMAGES_DIR = Path(__file__).parent / "images"
@@ -137,43 +137,29 @@ class TarotCardPlugin(MaiBotPlugin):
     async def handle_tarot(self, stream_id: str = "", **kwargs) -> tuple:
         return await self._draw_card(stream_id)
 
-    @EventHandler(
-        "tarot_natural",
+    @HookHandler(
+        hook="chat.receive.after_process",
+        name="tarot_natural_trigger",
         description="检测自然语言触发塔罗牌抽取",
-        event_type=EventType.ON_MESSAGE,
+        mode=HookMode.BLOCKING,
+        order=HookOrder.EARLY,
     )
-    async def handle_long_phrase(self, message: Any = None, stream_id: str = "", **kwargs) -> tuple:
-        if not message or not stream_id:
-            return True, True, None, None, None
+    async def handle_long_phrase(self, **kwargs) -> dict | None:
+        message: dict[str, Any] = kwargs.get("message", {}) or {}
+        text = str(message.get("processed_plain_text", "") or message.get("plain_text", "") or message.get("raw_message", "") or "").strip()
+        if not text:
+            return None
 
-        text = ""
-        if isinstance(message, dict):
-            text = (
-                message.get("plain_text", "")
-                or message.get("processed_plain_text", "")
-                or message.get("raw_message", "")
-                or ""
-            )
-            # 多行消息可能以 segments 形式存在
-            if not text:
-                segments = message.get("segments", []) or message.get("message", [])
-                if isinstance(segments, list):
-                    text = "".join(
-                        s.get("data", "") or s.get("text", "") or s.get("content", "") or ""
-                        for s in segments
-                        if isinstance(s, dict)
-                    )
-        else:
-            text = str(message)
-
-        self.ctx.logger.debug("塔罗插件收到消息: %s", text[:200] if len(text) > 200 else text)
+        self.ctx.logger.debug("塔罗插件收到消息: %s", text[:100])
 
         for kw in TRIGGER_KEYWORDS:
             if kw in text:
-                await self._draw_card(stream_id)
-                return True, True, "已抽取塔罗牌", None, None
+                stream_id = str(message.get("stream_id", "") or kwargs.get("stream_id", "") or "")
+                if stream_id:
+                    await self._draw_card(stream_id)
+                return {"action": "abort"}
 
-        return True, True, None, None, None
+        return None
 
     async def _draw_card(self, stream_id: str) -> tuple:
         card_name = random.choice(list(TAROT_CARDS.keys()))
