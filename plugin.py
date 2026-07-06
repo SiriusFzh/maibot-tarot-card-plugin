@@ -102,9 +102,6 @@ TAROT_CARDS = {
     },
 }
 
-LONG_PHRASE_KEY = "不属于这个时代的愚者"
-
-
 class PluginSection(PluginConfigBase):
     __ui_label__ = "插件"
     __ui_order__ = 0
@@ -152,7 +149,7 @@ class TarotCardPlugin(MaiBotPlugin):
         else:
             text = str(message)
 
-        if LONG_PHRASE_KEY in text and "抽一张塔罗牌" in text:
+        if "请帮我抽一张塔罗牌" in text:
             await self._draw_card(stream_id)
             return True, True, "已抽取塔罗牌", None, None
 
