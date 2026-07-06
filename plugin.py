@@ -102,7 +102,8 @@ TAROT_CARDS = {
     },
 }
 
-TRIGGER_KEYWORDS = ["不属于这个时代的愚者", "请帮我抽一张塔罗牌"]
+TRIGGER_PHRASE_A = "不属于这个时代的愚者"
+TRIGGER_PHRASE_B = "请帮我抽一张塔罗牌"
 
 
 class PluginSection(PluginConfigBase):
@@ -152,12 +153,11 @@ class TarotCardPlugin(MaiBotPlugin):
 
         self.ctx.logger.debug("塔罗插件收到消息: %s", text[:100])
 
-        for kw in TRIGGER_KEYWORDS:
-            if kw in text:
-                stream_id = str(message.get("session_id", "") or "")
-                if stream_id:
-                    await self._draw_card(stream_id)
-                return {"action": "abort"}
+        if TRIGGER_PHRASE_A in text and TRIGGER_PHRASE_B in text:
+            stream_id = str(message.get("session_id", "") or "")
+            if stream_id:
+                await self._draw_card(stream_id)
+            return {"action": "abort"}
 
         return None
 
