@@ -102,6 +102,9 @@ TAROT_CARDS = {
     },
 }
 
+TRIGGER_KEYWORDS = ["不属于这个时代的愚者", "请帮我抽一张塔罗牌"]
+
+
 class PluginSection(PluginConfigBase):
     __ui_label__ = "插件"
     __ui_order__ = 0
@@ -145,13 +148,30 @@ class TarotCardPlugin(MaiBotPlugin):
 
         text = ""
         if isinstance(message, dict):
-            text = message.get("plain_text", "") or message.get("processed_plain_text", "") or ""
+            text = (
+                message.get("plain_text", "")
+                or message.get("processed_plain_text", "")
+                or message.get("raw_message", "")
+                or ""
+            )
+            # 多行消息可能以 segments 形式存在
+            if not text:
+                segments = message.get("segments", []) or message.get("message", [])
+                if isinstance(segments, list):
+                    text = "".join(
+                        s.get("data", "") or s.get("text", "") or s.get("content", "") or ""
+                        for s in segments
+                        if isinstance(s, dict)
+                    )
         else:
             text = str(message)
 
-        if "请帮我抽一张塔罗牌" in text:
-            await self._draw_card(stream_id)
-            return True, True, "已抽取塔罗牌", None, None
+        self.ctx.logger.debug("塔罗插件收到消息: %s", text[:200] if len(text) > 200 else text)
+
+        for kw in TRIGGER_KEYWORDS:
+            if kw in text:
+                await self._draw_card(stream_id)
+                return True, True, "已抽取塔罗牌", None, None
 
         return True, True, None, None, None
 
