@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+  "id": "user.tarot-card-plugin",
+  "version": "1.0.0",
+  "name": "塔罗牌插件",
+  "description": "随机抽取一张大阿卡那塔罗牌，查看今日运势和建议",
+  "author": {
+    "name": "User",
+    "url": "https://github.com"
+  },
+  "license": "MIT",
+  "urls": {
+    "repository": "https://github.com"
+  },
+  "host_application": {
+    "min_version": "1.0.0",
+    "max_version": "1.99.99"
+  },
+  "sdk": {
+    "min_version": "2.0.0",
+    "max_version": "2.99.99"
+  },
+  "dependencies": [],
+  "capabilities": [
+    "send.text",
+    "send.image"
+  ],
+  "i18n": {
+    "default_locale": "zh-CN"
+  }
+}
