@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "id": "user.tarot-card-plugin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "塔罗牌插件",
   "description": "随机抽取一张大阿卡那塔罗牌，查看今日运势和建议",
   "author": {
@@ -33,5 +33,6 @@
     "supported_locales": [
       "zh-CN"
     ]
-  }
+  },
+  "plugin_type": "entertainment"
 }
