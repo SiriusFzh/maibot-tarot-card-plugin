@@ -5,12 +5,15 @@
   "name": "塔罗牌插件",
   "description": "随机抽取一张大阿卡那塔罗牌，查看今日运势和建议",
   "author": {
-    "name": "User",
-    "url": "https://github.com"
+    "name": "SiriusFzh",
+    "url": "https://github.com/SiriusFzh"
   },
   "license": "MIT",
   "urls": {
-    "repository": "https://github.com"
+    "repository": "https://github.com/SiriusFzh/maibot-tarot-card-plugin",
+    "homepage": "https://github.com/SiriusFzh/maibot-tarot-card-plugin",
+    "documentation": "https://github.com/SiriusFzh/maibot-tarot-card-plugin/blob/master/README.md",
+    "issues": "https://github.com/SiriusFzh/maibot-tarot-card-plugin/issues"
   },
   "host_application": {
     "min_version": "1.0.0",
@@ -26,6 +29,9 @@
     "send.image"
   ],
   "i18n": {
-    "default_locale": "zh-CN"
+    "default_locale": "zh-CN",
+    "supported_locales": [
+      "zh-CN"
+    ]
   }
 }
