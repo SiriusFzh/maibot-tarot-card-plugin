@@ -150,12 +150,11 @@ class TarotCardPlugin(MaiBotPlugin):
         if not text:
             return None
 
-        self.ctx.logger.debug("塔罗插件收到消息: %s", text[:100])
-
-        if TRIGGER_PHRASE in text:
+        if text == TRIGGER_PHRASE:
             stream_id = str(message.get("session_id", "") or "")
-            if stream_id:
-                await self._draw_card(stream_id)
+            if not stream_id:
+                return None
+            await self._draw_card(stream_id)
             return {"action": "abort"}
 
         return None
@@ -177,3 +176,4 @@ class TarotCardPlugin(MaiBotPlugin):
 
 def create_plugin() -> TarotCardPlugin:
     return TarotCardPlugin()
+
